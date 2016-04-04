@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -24,12 +25,17 @@ public class PlayerBuilder : MonoBehaviour
     Material defMaterial;
     Material invMaterial;
 
+    // To be removed
+    public Text tCredits;
+    public Text tBases;
+    // End
+
     // Object Prefabs
     Dictionary<string, GameObject> prefabs;
 
     // Currency Variables
     public Dictionary<string, int> costs { get; private set; }
-    int credits = 10000;
+    int credits = 3000;
     int bases = 10;
     bool valid;
 
@@ -49,6 +55,14 @@ public class PlayerBuilder : MonoBehaviour
 
     void Awake()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+
+        // To be removed
+        tBases.text = bases.ToString();
+        tCredits.text = credits.ToString();
+        // End
+
         // Get turret names and total turret count
         string[] turretNames = Enum.GetNames(typeof(Tool)).Skip(1).ToArray();
         int types = turretNames.Length;
@@ -166,9 +180,15 @@ public class PlayerBuilder : MonoBehaviour
         valid = false;
         hitCol = null;
         if (tool.ToString() == "Base")
+        {
             bases -= costs[tool.ToString()];
+            tBases.text = bases.ToString();
+        }
         else
+        {
             credits -= costs[tool.ToString()];
+            tCredits.text = credits.ToString();
+        }
     }    
 
     bool Affordable()
