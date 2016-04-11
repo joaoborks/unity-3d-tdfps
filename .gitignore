@@ -34,6 +34,6 @@ Thumbs.db
 # Unessential Folders #
 # =================== #
 Assets/Resources/
-Assets/Resources.meta
 Assets/Standard Assets/
-Assets/Standard Assets.meta
+Assets/SkyBox Volume 2/
+*.meta

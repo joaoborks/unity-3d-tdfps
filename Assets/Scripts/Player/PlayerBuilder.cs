@@ -48,7 +48,6 @@ public class PlayerBuilder : MonoBehaviour
     Ray ray;
     RaycastHit hit;
     Collider hitCol;
-    LayerMask mask;
     int floorLayer;
     int baseLayer;
     int turretLayer;
@@ -138,8 +137,7 @@ public class PlayerBuilder : MonoBehaviour
         target = cam.ScreenToWorldPoint(screenPoint);
         dir = target - cam.transform.position;
         ray = new Ray(cam.transform.position, dir.normalized);
-        mask = (1 << baseLayer) | (tool.ToString() == "Base" ? (1 << floorLayer) : (1 << turretLayer));
-        if (Physics.Raycast(ray, out hit, MAX_RANGE, mask))
+        if (Physics.Raycast(ray, out hit, MAX_RANGE))
         {
             hitCol = hit.collider;
             // For Base Placement
