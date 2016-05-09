@@ -2,69 +2,37 @@ using UnityEngine;
 using System.Collections;
 
 public class Blaster : Turret 
-{
-    enum States
-    {
-        None,
-        Idle,
-        Engaging
-    }
-    States state = States.None;
-
-    public LayerMask raycastTarget;
-    public Transform turretBase;
+{    
     public Transform turretWeapon;
     public Transform[] cannons;
 
     ParticleSystem[] ps = new ParticleSystem[2];
-    Collider[] enemies;
     Collider enemy;
-    Animator anim;
-    Vector3 detectPos;
     Vector3 dir;
-    float detectRadius = 8f;
-    float shotCooldown = 1.5f;
     float cannonMoveTime = 1f;
     float minCannonZ = -0.4f;
     float maxCannonZ = -0.9f;
     bool alternate;
-    bool attackable = true;
+    int rotationSens = 10;
+    int minCannonX = -45;
+    int maxCannonX = 45;
 
     protected override void Awake()
     {
         base.Awake();
         for (int i = 0; i < cannons.Length; i++)
             ps[i] = cannons[i].GetComponentInChildren<ParticleSystem>(true);
-        anim = GetComponent<Animator>();
-        detectPos = transform.position + Vector3.up * 2.5f;
+        detectRadius = 8f;
+        atkCooldown = 1.5f;
     }
 
-    public void Activate()
+    void Activate()
     {
         state = States.Idle;
         anim.enabled = false;
     }
 
-    void FixedUpdate()
-    {
-        switch (state)
-        {
-            case States.Idle:
-                Idle();
-                break;
-            case States.Engaging:
-                Engaging();
-                break;
-        }
-    }
-
-    void Idle()
-    {
-        if (Physics.CheckSphere(detectPos, detectRadius, raycastTarget))
-            state = States.Engaging;
-    }
-
-    void Engaging()
+    protected override void Engaging()
     {
         enemies = Physics.OverlapSphere(detectPos, detectRadius, raycastTarget);
         if (enemies.Length > 0)
@@ -80,19 +48,22 @@ public class Blaster : Turret
                     enemy = e;
                 }
             }
+            // Horizontal Rotation
             dir = enemy.transform.position - turretBase.position;
-            turretBase.rotation = Quaternion.Slerp(turretBase.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 10);
-            turretBase.localEulerAngles = new Vector3(0, turretBase.localEulerAngles.y);
-            if (attackable && Vector3.Angle(turretBase.forward, dir) < 5f)
+            dir.y = 0;
+            turretBase.rotation = Quaternion.Slerp(turretBase.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotationSens);
+            if (attackable && Vector3.Angle(turretBase.forward, dir) < 1)
             {
-                StartCoroutine(ShotCooldown());
-                Shoot();
+                StartCoroutine(AttackCooldown());
+                Attack();
             }
             // Turret aligned to target
             dir = enemy.transform.position - turretWeapon.position;
-            turretWeapon.rotation = Quaternion.Slerp(turretWeapon.rotation, Quaternion.LookRotation(dir), Time.deltaTime * 10);
+            turretWeapon.rotation = Quaternion.Slerp(turretWeapon.rotation, Quaternion.LookRotation(dir), Time.deltaTime * rotationSens);
             float angle = turretWeapon.localEulerAngles.x;
-            turretWeapon.localEulerAngles = new Vector3(Mathf.Clamp(angle, -45, 45), 0, 0);            
+            if (angle > 180)
+                angle -= 360;
+            turretWeapon.localEulerAngles = new Vector3(Mathf.Clamp(angle, minCannonX, maxCannonX), 0);            
         }
         else
         {
@@ -100,24 +71,17 @@ public class Blaster : Turret
         }
     }
 
-    void Shoot()
+    protected override void Attack()
     {
         int i = alternate ? 0 : 1;
         alternate = !alternate;
         ps[i].gameObject.SetActive(true);
         ps[i].Play();
-        StartCoroutine(EndShoot(i));
+        StartCoroutine(EndAttack(i));
         StartCoroutine(MoveCannon(i));
     }
 
-    IEnumerator ShotCooldown()
-    {
-        attackable = false;
-        yield return new WaitForSeconds(shotCooldown);
-        attackable = true;
-    }
-
-    IEnumerator EndShoot(int index)
+    IEnumerator EndAttack(int index)
     {
         yield return new WaitForSeconds(ps[index].duration);
         ps[index].gameObject.SetActive(false);

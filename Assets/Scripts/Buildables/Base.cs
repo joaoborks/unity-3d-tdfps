@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Base : Buildable
+public class Base : Building
 {
     static GameObject wallPrefab;
     static GameObject dWallPrefab;

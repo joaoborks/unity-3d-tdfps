@@ -33,29 +33,17 @@ public class PlayerPhysics : MonoBehaviour
 
     void Update()
     {
+        // Input Handling
         if (Input.GetButtonDown("Jump"))
             jump = true;
         else if (Input.GetButtonUp("Jump"))
             jump = false;
-    }
-
-    void FixedUpdate()
-    {
-        // Input Handling
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         sprint = Input.GetButton("Sprint");
 
         if (horizontal != 0 || vertical < 0)
             sprint = false;
-
-        // Camera Controlling
-        transform.Rotate(Vector3.up * lookSens * Time.deltaTime * Input.GetAxis("Mouse X"));
-
-        camRotation.x -= Input.GetAxis("Mouse Y") * lookSens * Time.deltaTime;
-        camRotation.x = Mathf.Clamp(camRotation.x, MIN_ANGLE, MAX_ANGLE);
-
-        cam.localEulerAngles = camRotation;
 
         // Movement Control
         CollisionFlags flag = controller.collisionFlags;
@@ -78,5 +66,16 @@ public class PlayerPhysics : MonoBehaviour
         moveDirection.y += gravity * MASS * Time.deltaTime;
 
         controller.Move(moveDirection * Time.deltaTime);
+    }
+
+    void LateUpdate()
+    {
+        // Camera Controlling
+        transform.Rotate(Vector3.up * lookSens * Time.deltaTime * Input.GetAxis("Mouse X"));
+
+        camRotation.x -= Input.GetAxis("Mouse Y") * lookSens * Time.deltaTime;
+        camRotation.x = Mathf.Clamp(camRotation.x, MIN_ANGLE, MAX_ANGLE);
+
+        cam.localEulerAngles = camRotation;
     }
 }
