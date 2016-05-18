@@ -2,20 +2,22 @@ using UnityEngine;
 using System.Collections;
 
 public class Blaster : Turret 
-{    
-    public Transform turretWeapon;
+{
+    public Transform origin,
+        turretWeapon;
     public Transform[] cannons;
 
     ParticleSystem[] ps = new ParticleSystem[2];
     Collider enemy;
     Vector3 dir;
-    float cannonMoveTime = 1f;
-    float minCannonZ = -0.4f;
-    float maxCannonZ = -0.9f;
+    float cannonMoveTime = 1f,
+        minCannonZ = -0.4f,
+        maxCannonZ = -0.9f,
+        damage = 10f;
     bool alternate;
-    int rotationSens = 10;
-    int minCannonX = -45;
-    int maxCannonX = 45;
+    int rotationSens = 10,
+        minCannonX = -45,
+        maxCannonX = 45;
 
     protected override void Awake()
     {
@@ -66,9 +68,7 @@ public class Blaster : Turret
             turretWeapon.localEulerAngles = new Vector3(Mathf.Clamp(angle, minCannonX, maxCannonX), 0);            
         }
         else
-        {
             state = States.Idle;
-        }
     }
 
     protected override void Attack()
@@ -77,6 +77,12 @@ public class Blaster : Turret
         alternate = !alternate;
         ps[i].gameObject.SetActive(true);
         ps[i].Play();
+        if (Physics.Raycast(origin.position, enemy.transform.position - origin.position, detectRadius, raycastTarget))
+        {
+            IDamageable dmgbl = enemy.GetComponent<IDamageable>();
+            if (dmgbl != null)
+                dmgbl.TakeDamage(damage);
+        }
         StartCoroutine(EndAttack(i));
         StartCoroutine(MoveCannon(i));
     }

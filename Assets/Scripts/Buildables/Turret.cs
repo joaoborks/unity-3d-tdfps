@@ -18,8 +18,8 @@ public abstract class Turret : Building
     protected Transform turretBase;
     protected Animator anim;
     protected Vector3 detectPos;
-    protected float detectRadius;
-    protected float atkCooldown;
+    protected float detectRadius,
+        atkCooldown;
     protected bool attackable = true;
 
     protected override void Awake()
