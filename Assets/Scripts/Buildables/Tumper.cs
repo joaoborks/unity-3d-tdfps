@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Tumper : Turret
 {
-    float damage = 5f,
-        slowRatio = 0.4f,
-        slowTime = 2f;
+    float damage = 10f,
+        slowRatio = 0.3f,
+        slowTime = 2.5f;
 
     protected override void Awake()
     {
@@ -32,12 +32,15 @@ public class Tumper : Turret
         ISlowable slwbl;
         foreach (Collider col in enemies)
         {
-            dmgbl = col.GetComponent<IDamageable>();
-            slwbl = col.GetComponent<ISlowable>();
-            if (dmgbl != null)
-                dmgbl.TakeDamage(damage);
-            if (slwbl != null)
-                slwbl.GetSlowed(slowTime, slowRatio);
+            if (col != null)
+            {
+                dmgbl = col.GetComponent<IDamageable>();
+                slwbl = col.GetComponent<ISlowable>();
+                if (dmgbl != null)
+                    dmgbl.TakeDamage(damage);
+                if (slwbl != null)
+                    slwbl.GetSlowed(slowTime, slowRatio);
+            }
         }
     }
 

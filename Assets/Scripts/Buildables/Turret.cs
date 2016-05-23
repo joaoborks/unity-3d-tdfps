@@ -12,7 +12,7 @@ public abstract class Turret : Building
     }
     protected States state = States.None;
 
-    public static LayerMask raycastTarget = 1 << LayerMask.NameToLayer("Enemy");
+    public static LayerMask raycastTarget;
 
     protected Collider[] enemies;
     protected Transform turretBase;
@@ -25,6 +25,7 @@ public abstract class Turret : Building
     protected override void Awake()
     {
         base.Awake();
+        raycastTarget = 1 << LayerMask.NameToLayer("Enemy");
         anim = GetComponent<Animator>();
         turretBase = transform.GetChild(0).GetChild(0);
         detectPos = turretBase.position;

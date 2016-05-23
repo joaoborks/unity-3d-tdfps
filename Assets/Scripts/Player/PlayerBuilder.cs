@@ -22,45 +22,52 @@ public class PlayerBuilder : MonoBehaviour
     Dictionary<string, GameObject> placeHolders;
     Dictionary<string, List<MeshRenderer>> phRenderers;
     GameObject ph;
-    Material defMaterial;
-    Material invMaterial;
+    Material defMaterial,
+        invMaterial;
 
-    // To be removed
-    public Text tCredits;
-    public Text tBases;
-    // End
+    // UI Components
+    public Text tCredits,
+        tBases;
+    public CanvasGroup builder;
+
+    // Waves Logic
+    WaveController waves;
+    PlayerCombat pc;
+    Animator anim;
 
     // Object Prefabs
     Dictionary<string, GameObject> prefabs;
 
     // Currency Variables
     public Dictionary<string, int> costs { get; private set; }
-    int credits = 3000;
-    int bases = 10;
+    [HideInInspector]
+    int credits = 1500,
+        bases = 6;
     bool valid;
 
     // Raycasting
     const float MAX_RANGE = 6f;
     Camera cam;
-    Vector3 target;
-    Vector3 dir;
-    Vector3 screenPoint;    
+    Vector3 target,
+        dir,
+        screenPoint;
     Ray ray;
     RaycastHit hit;
     Collider hitCol;
-    int floorLayer;
-    int baseLayer;
-    int turretLayer;
+    int floorLayer,
+        baseLayer,
+        turretLayer;
 
     void Awake()
     {
+        waves = FindObjectOfType<WaveController>();
+        pc = GetComponent<PlayerCombat>();
+        anim = GetComponent<Animator>();
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
 
-        // To be removed
         tBases.text = bases.ToString();
         tCredits.text = credits.ToString();
-        // End
 
         // Get turret names and total turret count
         string[] turretNames = Enum.GetNames(typeof(Tool)).Skip(1).ToArray();
@@ -101,7 +108,7 @@ public class PlayerBuilder : MonoBehaviour
         screenPoint = new Vector3(Screen.width / 2, Screen.height / 2, MAX_RANGE);
         floorLayer = LayerMask.NameToLayer("Floor");
         baseLayer = LayerMask.NameToLayer("Base");
-        turretLayer = LayerMask.NameToLayer("Turret");        
+        turretLayer = LayerMask.NameToLayer("Turret");
     }
 
     void Update()
@@ -127,6 +134,27 @@ public class PlayerBuilder : MonoBehaviour
         // Update active tool based on input
         if (valid && Input.GetButtonDown("Fire1"))
             Build();
+
+        if (Input.GetButtonDown("Spawn Wave"))
+            waves.BeginWave();
+    }
+    
+    void OnDisable()
+    {
+        pc.enabled = true;
+        if (builder != null)
+            builder.alpha = 0;
+        anim.SetBool("building", false);
+        ph.SetActive(false);
+    }
+
+    void OnEnable()
+    {
+        pc.enabled = false;
+        builder.alpha = 1;
+
+        anim.SetTrigger("build");
+        anim.SetBool("building", true);
     }
 
     void FixedUpdate()
@@ -169,7 +197,7 @@ public class PlayerBuilder : MonoBehaviour
                 // Upgrade
                 print("Targeting: " + hitCol.gameObject.name);
             }
-        }            
+        }
     }
 
     void Build()
@@ -187,7 +215,15 @@ public class PlayerBuilder : MonoBehaviour
             credits -= costs[tool.ToString()];
             tCredits.text = credits.ToString();
         }
-    }    
+    }
+
+    public void UpdateResources(int addCredits, int addBases)
+    {
+        credits += addCredits;
+        tCredits.text = credits.ToString();
+        bases += addBases;
+        tBases.text = bases.ToString();
+    }
 
     bool Affordable()
     {

@@ -10,7 +10,7 @@ public class Blaster : Turret
     ParticleSystem[] ps = new ParticleSystem[2];
     Collider enemy;
     Vector3 dir;
-    float cannonMoveTime = 1f,
+    float cannonMoveTime = 0.5f,
         minCannonZ = -0.4f,
         maxCannonZ = -0.9f,
         damage = 10f;
@@ -25,7 +25,7 @@ public class Blaster : Turret
         for (int i = 0; i < cannons.Length; i++)
             ps[i] = cannons[i].GetComponentInChildren<ParticleSystem>(true);
         detectRadius = 8f;
-        atkCooldown = 1.5f;
+        atkCooldown = 0.5f;
     }
 
     void Activate()
@@ -39,7 +39,7 @@ public class Blaster : Turret
         enemies = Physics.OverlapSphere(detectPos, detectRadius, raycastTarget);
         if (enemies.Length > 0)
         {
-            float minDist = detectRadius;
+            float minDist = 2 * detectRadius;
             float dist;
             foreach (Collider e in enemies)
             {

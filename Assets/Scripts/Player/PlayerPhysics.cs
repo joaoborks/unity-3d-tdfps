@@ -23,11 +23,13 @@ public class PlayerPhysics : MonoBehaviour
     int lookSens = 200;
 
     CharacterController controller;
+    PlayerCombat pc;
     Transform cam;
 
     void Awake()
     {
         controller = GetComponent<CharacterController>();
+        pc = GetComponent<PlayerCombat>();
         cam = GetComponentInChildren<Camera>().transform;
     }
 
@@ -66,6 +68,12 @@ public class PlayerPhysics : MonoBehaviour
         moveDirection.y += gravity * MASS * Time.deltaTime;
 
         controller.Move(moveDirection * Time.deltaTime);
+
+        if (transform.position.y < -5)
+        {
+            pc.ChangeHealth(-100);
+            enabled = false;
+        }
     }
 
     void LateUpdate()

@@ -8,7 +8,7 @@ public class Laser : Turret
 
     Collider enemy;
     Vector3 dir;
-    float damage = 1f,
+    float damage = 2f,
         atkDur = 1f,
         hitFreq = 0.1f;
     int rotationSens = 10,
@@ -19,7 +19,7 @@ public class Laser : Turret
     {
         base.Awake();
         detectRadius = 8f;
-        atkCooldown = 2f;
+        atkCooldown = 1f;
     }
 
     void Activate()
