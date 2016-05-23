@@ -19,7 +19,7 @@ public class WaveController : MonoBehaviour
     PlayerBuilder builder;
     PlayerCombat pc;
     PauseMenu menu;
-    float spawnInterval = .5f;
+    float spawnInterval = 1f;
     int maxWaves = 3,
         curWave = 1,
         maxEnemiesWaveNum = 5,
@@ -54,8 +54,8 @@ public class WaveController : MonoBehaviour
         {
             builder.enabled = true;
             builder.UpdateResources(creditsWave * curWave, basesWave * curWave);
+            curWave++;
         }
-        curWave++;
         wave.text = "Wave " + curWave + "/" + maxWaves;
         pc.ChangeAmmo(150);
         pc.ChangeHealth(100);

@@ -145,7 +145,8 @@ public class PlayerBuilder : MonoBehaviour
         if (builder != null)
             builder.alpha = 0;
         anim.SetBool("building", false);
-        ph.SetActive(false);
+        if (ph != null)
+            ph.SetActive(false);
     }
 
     void OnEnable()

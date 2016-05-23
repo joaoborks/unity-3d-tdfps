@@ -1,62 +1,44 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-public class EnemyRanged : MonoBehaviour, IDamageable, ISlowable, IPathWalkable
+public abstract class Enemy : MonoBehaviour, IDamageable, ISlowable, IPathWalkable
 {
     public LayerMask mask;
+    public Slider hp;
+
+    protected Transform target,
+        nucleum;
+    protected Collider[] cols;
+    protected Collider enemy;
+    protected float maxHealth,
+        health,
+        defSpeed,
+        speed,
+        sightRange,
+        atkCd,
+        rotSens;
+    protected bool disturbed;
 
     ParticleSystem ps;
     Transform[] path;
-    Transform target,
-        nucleum;
     Coroutine slowCooldown;
-    Collider[] cols;
-    Collider enemy;
     Vector3 curWaypoint;
-    float maxHealth = 70,
-        health,
-        defSpeed = 0.08f,
-        speed,
-        sightRange = 10f,
-        rotSens = 0.05f,
-        atkCd = 0.5f;
-    bool disturbed;
     int curWPIndex;
 
-    void Awake()
+    protected virtual void Awake()
     {
         ps = GetComponentInChildren<ParticleSystem>();
         target = FindObjectOfType<PlayerPhysics>().transform;
         nucleum = FindObjectOfType<Nucleum>().transform;
         health = maxHealth;
         speed = defSpeed;
+        hp.value = health / maxHealth;
     }
 
     void FixedUpdate()
     {
-        cols = Physics.OverlapSphere(transform.position, 8, mask);
-        if (cols.Length > 0)
-        {
-            float minDist = 15,
-                dist;
-            foreach (Collider c in cols)
-            {
-                dist = Vector3.Distance(transform.position, c.transform.position);
-                if (dist < minDist)
-                {
-                    minDist = dist;
-                    enemy = c;
-                }
-            }
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(enemy.transform.position - transform.position), rotSens);
-            if (!disturbed)
-            {
-                disturbed = true;
-                StartCoroutine(Attack());
-            }
-        }
-        else
-            disturbed = false;
+        CheckDisturbed();
 
         if (!disturbed && path != null)
         {
@@ -75,6 +57,8 @@ public class EnemyRanged : MonoBehaviour, IDamageable, ISlowable, IPathWalkable
         }
     }
 
+    protected abstract void CheckDisturbed();
+
     public void SetPath(Transform[] path)
     {
         this.path = path;
@@ -87,6 +71,8 @@ public class EnemyRanged : MonoBehaviour, IDamageable, ISlowable, IPathWalkable
         health -= damage;
         if (health <= 0)
             Die();
+
+        hp.value = health / maxHealth;
     }
 
     public void Die()
@@ -109,7 +95,7 @@ public class EnemyRanged : MonoBehaviour, IDamageable, ISlowable, IPathWalkable
         speed = defSpeed;
     }
 
-    IEnumerator Attack()
+    protected IEnumerator Attack()
     {
         while (disturbed)
         {
