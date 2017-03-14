@@ -1,0 +1,132 @@
+fileFormatVersion: 2
+guid: 5acc77e8c4089334baddbe44eb116ab2
+timeCreated: 1458421217
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: body_cables
+    100002: body_detailpart
+    100004: body_metalpart
+    100006: cannon_1_detailpart
+    100008: cannon_1_metalpart
+    100010: cannon_2_detailpart
+    100012: cannon_2_metalpart
+    100014: cannon_detailpart
+    100016: cannon_metalpart
+    100018: //RootNode
+    100020: body_tubes
+    100022: connector_detailpart
+    400000: body_cables
+    400002: body_detailpart
+    400004: body_metalpart
+    400006: cannon_1_detailpart
+    400008: cannon_1_metalpart
+    400010: cannon_2_detailpart
+    400012: cannon_2_metalpart
+    400014: cannon_detailpart
+    400016: cannon_metalpart
+    400018: //RootNode
+    400020: body_tubes
+    400022: connector_detailpart
+    2300000: body_cables
+    2300002: body_detailpart
+    2300004: body_metalpart
+    2300006: cannon_1_detailpart
+    2300008: cannon_1_metalpart
+    2300010: cannon_2_detailpart
+    2300012: cannon_2_metalpart
+    2300014: cannon_detailpart
+    2300016: cannon_metalpart
+    2300018: //RootNode
+    2300020: body_tubes
+    2300022: connector_detailpart
+    3300000: body_cables
+    3300002: body_detailpart
+    3300004: body_metalpart
+    3300006: cannon_1_detailpart
+    3300008: cannon_1_metalpart
+    3300010: cannon_2_detailpart
+    3300012: cannon_2_metalpart
+    3300014: cannon_detailpart
+    3300016: cannon_metalpart
+    3300018: //RootNode
+    3300020: body_tubes
+    3300022: connector_detailpart
+    4300000: connector
+    4300002: body_metalpart
+    4300004: body_cables
+    4300006: body_detailpart
+    4300008: cannon_metalpart
+    4300010: cannon_detailpart
+    4300012: cannon_1_metalpart
+    4300014: cannon_1_detailpart
+    4300016: cannon_2_metalpart
+    4300018: cannon_2_detailpart
+    4300020: connector_metalpart
+    4300022: connector_detailpart
+    4300024: body_tubes
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

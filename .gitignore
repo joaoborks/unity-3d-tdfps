@@ -29,11 +29,3 @@ obj/
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# =================== #
-# Unessential Folders #
-# =================== #
-Assets/Resources/
-Assets/Standard Assets/
-Assets/SkyBox Volume 2/
-*.meta
