@@ -25,7 +25,7 @@ public class Building : MonoBehaviour
 
     public void Arrive()
     {
-        ParticleSystem arrive = transform.FindChild("Arrive").GetComponent<ParticleSystem>();
+        ParticleSystem arrive = transform.Find("Arrive").GetComponent<ParticleSystem>();
         arrive.Play();
         Destroy(arrive.gameObject, arrive.startLifetime);
     }

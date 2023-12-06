@@ -92,7 +92,7 @@ public class PlayerBuilder : MonoBehaviour
         for (int i = 0; i < types; i++)
         {
             name = turretNames[i];
-            placeHolders[name] = phParent.FindChild(name).gameObject;
+            placeHolders[name] = phParent.Find(name).gameObject;
             placeHolders[name].SetActive(false);
             prefabs[name] = Resources.Load<GameObject>("Prefabs/Buildables/" + name);
             phRenderers[name] = placeHolders[name].GetComponentsInChildren<MeshRenderer>().ToList();
