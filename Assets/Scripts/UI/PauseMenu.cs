@@ -1,16 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField]
     CanvasGroup[] groups;
-    int activeGroup;
 
-    void Awake()
-    {
-        groups = GetComponentsInChildren<CanvasGroup>();
-    }
+    int activeGroup;
 
     void Update()
     {

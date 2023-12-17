@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class PlayerBuilder : MonoBehaviour
 {
     // The placeholders must have the same name as the enum items
-    enum Tool
+    public enum Tool
     {
         None,
         Base,
@@ -39,7 +39,7 @@ public class PlayerBuilder : MonoBehaviour
     Dictionary<string, GameObject> prefabs;
 
     // Currency Variables
-    public Dictionary<string, int> costs { get; private set; }
+    public Dictionary<Tool, int> costs { get; private set; }
     [HideInInspector]
     int credits = 1500,
         bases = 6;
@@ -60,7 +60,7 @@ public class PlayerBuilder : MonoBehaviour
 
     void Awake()
     {
-        waves = FindObjectOfType<WaveController>();
+        waves = FindAnyObjectByType<WaveController>();
         pc = GetComponent<PlayerCombat>();
         anim = GetComponent<Animator>();
         Cursor.visible = false;
@@ -74,11 +74,13 @@ public class PlayerBuilder : MonoBehaviour
         int types = turretNames.Length;
 
         // Sets each turret cost
-        costs = new Dictionary<string, int>(types);
-        costs[Tool.Base.ToString()] = 1;
-        costs[Tool.Blaster.ToString()] = 300;
-        costs[Tool.Tumper.ToString()] = 500;
-        costs[Tool.Laser.ToString()] = 2000;
+        costs = new Dictionary<Tool, int>(types)
+        {
+            [Tool.Base] = 1,
+            [Tool.Blaster] = 300,
+            [Tool.Tumper] = 500,
+            [Tool.Laser] = 2000
+        };
 
         // Initializes the prefabs Dictionary
         prefabs = new Dictionary<string, GameObject>(types);
@@ -92,12 +94,11 @@ public class PlayerBuilder : MonoBehaviour
         for (int i = 0; i < types; i++)
         {
             name = turretNames[i];
-            placeHolders[name] = phParent.FindChild(name).gameObject;
+            placeHolders[name] = phParent.Find(name).gameObject;
             placeHolders[name].SetActive(false);
             prefabs[name] = Resources.Load<GameObject>("Prefabs/Buildables/" + name);
             phRenderers[name] = placeHolders[name].GetComponentsInChildren<MeshRenderer>().ToList();
             phRenderers[name].RemoveAll(HasDetail);
-            phRenderers[name].TrimExcess();
         }
 
         // Set initial tool
@@ -138,7 +139,7 @@ public class PlayerBuilder : MonoBehaviour
         if (Input.GetButtonDown("Spawn Wave"))
             waves.BeginWave();
     }
-    
+
     void OnDisable()
     {
         pc.enabled = true;
@@ -191,12 +192,10 @@ public class PlayerBuilder : MonoBehaviour
 
                     DisplayPlaceholder();
                 }
-                print("Targeting: " + hitCol.gameObject.name);
             }
             else if (hitCol.gameObject.layer == turretLayer)
             {
                 // Upgrade
-                print("Targeting: " + hitCol.gameObject.name);
             }
         }
     }
@@ -208,12 +207,12 @@ public class PlayerBuilder : MonoBehaviour
         hitCol = null;
         if (tool.ToString() == "Base")
         {
-            bases -= costs[tool.ToString()];
+            bases -= costs[tool];
             tBases.text = bases.ToString();
         }
         else
         {
-            credits -= costs[tool.ToString()];
+            credits -= costs[tool];
             tCredits.text = credits.ToString();
         }
     }
@@ -228,7 +227,7 @@ public class PlayerBuilder : MonoBehaviour
 
     bool Affordable()
     {
-        int cost = costs[tool.ToString()];
+        int cost = costs[tool];
         return tool.ToString() == "Base" ? bases >= cost : credits >= cost;
     }
 
